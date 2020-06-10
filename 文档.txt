@@ -1,0 +1,30 @@
+1、GetPriAndPubKey()
+    获取公私钥，私钥在前，公钥在后，逗号分割。例如: siyao,gongyao
+
+2、Init(int fd, string jsonFomt)
+    1. fd是创建tun后的文件描述符fd
+    2. jsonFomt是连接需要的参数
+        {
+        	"own_private":  string,      //上面接口获取的私钥
+        	"own_public":   string,     //上面接口获取的公钥
+        	"their_public": string,     //服务器的公钥
+        	"endpoint":     string,     //服务器的IP
+        	"allow_ip":     string,     //分配的客户端虚拟ip
+        	"log_path":     string,     //存放的日志
+        	"is_iOS":       string,     //是否是iOS，不是就填空
+        	"ts":           int,        //到期时间
+        	"sign":         string,     //签名串
+        	"netmask":      int,         //固定值32
+        	"interval_time":  int        //间隔时间，用来统计网络异常时多久上报一次101。默认50s
+        }
+    3.  当Init方法返回的内容不为空时，说明连接失败，不能调用Start()方法。
+
+3、Start(int fd, Callback cb)
+    1. fd是创建pipe的管道fd
+    2. 回调方法
+    type Callback interface {
+    	CallStatus(int)
+    }
+    3. 此方法连接成功后会阻塞
+4、GetDomain(string domain,string secret,string isAbroad)  //获取连接域名方法。第一个参数是 qt 的域名值。第二个参数默认空。
+第三个参数代表是否应用在国外。"0":国内。"1":国外
